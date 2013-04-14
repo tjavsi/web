@@ -19,3 +19,11 @@ class NewsPost(models.Model):
     class Meta:
         verbose_name = 'nyhed'
         verbose_name_plural = verbose_name + 'er'
+
+    def json_of(self):
+        return {
+            'author': self.author.get_profile().studentnumber,
+            'title': self.title,
+            'posted': self.posted,
+            'body': self.body,
+        }

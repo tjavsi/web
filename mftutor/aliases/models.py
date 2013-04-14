@@ -15,6 +15,12 @@ class Alias(models.Model):
         verbose_name_plural = verbose_name + 'er'
         unique_together = (('source', 'destination'),)
 
+    def json_of(self):
+        return {
+            'source': self.source,
+            'destination': self.destination,
+        }
+
 def transitive_closure(u, edges, visited=None):
     if not isinstance(u, basestring):
         res = {}

@@ -82,3 +82,12 @@ class ProfileActivation(models.Model):
                 (self.last_name) + u'#' +
                 activation_data +
                 u'').encode('ascii', 'ignore')
+
+    def json_of(self):
+        return {
+            'studentnumber': self.profile.studentnumber,
+            'email': self.email,
+            'name': self.get_full_name(),
+            'activation_key': self.activation_key,
+            'activation_request_time': self.activation_request_time,
+        }

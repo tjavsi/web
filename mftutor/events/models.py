@@ -1,6 +1,7 @@
 # vim:set fileencoding=utf-8:
 from django.db import models
 from ..tutor.models import Tutor
+from datetime import date, time, datetime
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -29,6 +30,17 @@ class Event(models.Model):
         verbose_name = 'begivenhed'
         verbose_name_plural = verbose_name + 'er'
 
+    def json_of(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'start_date': date.strftime(self.start_date, '%Y-%m-%d') if self.start_date else None,
+            'start_time': time.strftime(self.start_time, '%H:%M:%S') if self.start_time else None,
+            'end_date': date.strftime(self.end_date, '%Y-%m-%d') if self.end_date else None,
+            'end_time': time.strftime(self.end_time, '%H:%M:%S') if self.end_time else None,
+            'rsvp': self.rsvp,
+        }
+
 class EventParticipant(models.Model):
     event = models.ForeignKey(Event, related_name="participants")
     tutor = models.ForeignKey(Tutor, related_name="events")
@@ -47,3 +59,11 @@ class EventParticipant(models.Model):
         verbose_name = 'tilbagemelding'
         verbose_name_plural = verbose_name + 'er'
         ordering = ['event', 'status']
+
+    def json_of(self):
+        return {
+            'event': self.event.title,
+            'tutor': self.tutor.studentnumber,
+            'year': self.tutor.studentnumber,
+            'status': self.status,
+        }

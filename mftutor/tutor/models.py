@@ -2,6 +2,7 @@
 # See https://docs.djangoproject.com/en/1.4/topics/auth/
 # for a discussion on user profiles and django.contrib.auth
 
+from datetime import *
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -57,6 +58,20 @@ class TutorProfile(models.Model):
             return self.activation.get_full_name()
         return None
 
+    def json_of(self):
+        return {
+            'name': self.get_full_name(),
+            'email': self.user.email if self.user else self.activation.email,
+            'street': self.street,
+            'city': self.city,
+            'phone': self.phone,
+            'birthday': date.strftime(self.birthday, '%Y-%m-%d') if self.birthday else None,
+            'study': self.study,
+            'studentnumber': self.studentnumber,
+            'gender': self.gender,
+            'is_superuser': self.user.is_superuser,
+        }
+
 # "Arbejdsgruppe"
 class TutorGroup(models.Model):
     objects = models.Manager()
@@ -76,12 +91,25 @@ class TutorGroup(models.Model):
         verbose_name = 'arbejdsgruppe'
         verbose_name_plural = verbose_name + 'r'
 
+    def json_of(self):
+        return {
+            'handle': self.handle,
+            'name': self.name,
+            'visible': self.visible,
+        }
+
 # "Rushold"
 class RusClass(models.Model):
     id = models.AutoField(primary_key=True)
     handle = models.CharField(max_length=20, verbose_name="Navn",
         help_text="Bruges i holdets emailadresse")
     year = models.IntegerField(verbose_name="Tutorår")
+
+    def json_of(self):
+        return {
+            'handle': self.handle,
+            'year': self.year,
+            }
 
 # Membership of a user for a single year
 class Tutor(models.Model):
@@ -111,6 +139,16 @@ class Tutor(models.Model):
         verbose_name = 'tutor'
         verbose_name_plural = verbose_name + 'er'
 
+    def json_of(self):
+        return {
+            'studentnumber': self.profile.studentnumber,
+            'groups': [group.handle for group in self.groups.all()],
+            'year': self.year,
+            'early_termination': datetime.strftime(self.early_termination, '%Y-%m-%d %H:%M:%S') if self.early_termination else None,
+            'early_termination_reason': self.early_termination_reason,
+            'rusclass': self.rusclass.handle if self.rusclass else None,
+            }
+
 class TutorGroupLeader(models.Model):
     group = models.ForeignKey(TutorGroup)
     year = models.IntegerField()
@@ -121,6 +159,13 @@ class TutorGroupLeader(models.Model):
         verbose_name = 'gruppeansvarlig'
         verbose_name_plural = verbose_name + 'e'
         unique_together = (('group', 'year'),)
+
+    def json_of(self):
+        return {
+            'group': self.group.handle,
+            'year': self.year,
+            'tutor': self.tutor.profile.studentnumber,
+            }
 
 def tutor_group_leader(group, year):
     try:
@@ -143,9 +188,18 @@ class BoardMember(models.Model):
         verbose_name = 'bestyrelsesmedlem'
         verbose_name_plural = verbose_name + 'mer'
 
+    def json_of(self):
+        return {
+            'tutor': self.tutor.profile.studentnumber,
+            'year': self.tutor.year,
+            'position': self.position,
+            'title': self.title,
+            }
 
 # Freshman semester of a user for a single year
 class Rus(models.Model):
     id = models.AutoField(primary_key=True)
     profile = models.ForeignKey(TutorProfile)
     year = models.IntegerField(verbose_name="Tutorår")
+
+    # TODO: json_of and use in export.py and import.py backup scripts.
