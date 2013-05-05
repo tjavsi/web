@@ -198,18 +198,102 @@ function navneleg() {
 
 function win_key_down(e) {
   if (!e) e = window.event;
-  if (e.keyCode == 78) {
+  if (e.keyCode == 78) { // n
     navneleg();
-    e.preventDefault();
-    return false;
+  } else if (e.keyCode == 71) { // g
+    show_gallery();
+  } else {
+    return true;
   }
-  return true;
+  e.preventDefault();
+  return false;
 }
 window.addEventListener('keydown', win_key_down, false);
+
+function get_gallery() {
+  var id = 'gallery';
+  var g = document.getElementById(id);
+  if (g) return g;
+  g = document.createElement('div');
+  g.id = id;
+
+  var pics = document.getElementsByClassName('tutorpicture');
+  var portraits = [], landscapes = [];
+  for (var i = 0, l = pics.length; i < l; ++i) {
+    var pic = pics[i];
+    if (pic.className.indexOf('portrait') > -1) {
+      portraits.push(pic);
+    } else {
+      landscapes.push(pic);
+    }
+  }
+  var pageWidth = 800,
+    portraitWidth = 100,
+    portraitHeight = 160,
+    landscapeWidth = 160,
+    landscapeHeight = 100;
+  var i1 = 0, i2 = 0, l1 = portraits.length, l2 = landscapes.length;
+  while (i1 < l1 || i2 < l2) {
+    for (var x = 0; x < pageWidth && i1 < l1; x += portraitWidth) {
+      var pic = portraits[i1++];
+      var container = document.createElement('div');
+      container.className = 'tutorpicture portrait';
+      container.style.width = portraitWidth+'px';
+      container.style.height = portraitHeight+'px';
+      container.style.cssFloat = 'left';
+      container.style.overflow = 'hidden';
+      if (x == 0) container.style.clear = 'left';
+      var img = document.createElement('img');
+      img.src = pic.src;
+      img.style.height = '100%';
+      container.appendChild(img);
+      g.appendChild(container);
+      var sn = pic.getAttribute('data-studentnumber');
+      img.onclick = function (event) {
+	show_tutor('tutor'+sn);
+      };
+    }
+    for (var x = 0; x < pageWidth && i2 < l2; x += landscapeWidth) {
+      var pic = landscapes[i2++];
+      var container = document.createElement('div');
+      container.className = 'tutorpicture';
+      container.style.width = landscapeWidth+'px';
+      container.style.height = landscapeHeight+'px';
+      container.style.cssFloat = 'left';
+      container.style.overflow = 'hidden';
+      if (x == 0) container.style.clear = 'left';
+      var img = document.createElement('img');
+      img.src = pic.src;
+      img.style.width = '100%';
+      container.appendChild(img);
+      g.appendChild(container);
+      var sn = pic.getAttribute('data-studentnumber');
+      console.log(sn);
+      img.onclick = function (event) {
+	show_tutor('tutor'+sn);
+      };
+    }
+  }
+
+  document.getElementById('content').appendChild(g);
+  return g;
+}
+
+function show_gallery() {
+  get_gallery().style.display = 'block';
+  document.getElementById('tutors_page').style.display = 'none';
+}
+
+function show_tutor(cls) {
+  get_gallery().style.display = 'none';
+  document.getElementById('tutors_page').style.display = 'block';
+  focus_tutoraddress.call(document.getElementsByClassName(cls)[0], null);
+}
 </script>
 {% endblock %}
 {% block bodyclass %}tutors{% endblock %}
 {% block content %}
+<div id="tutors_page">
 <p>
 Vælg gruppe:
 <select onchange="location = this.value">
@@ -236,7 +320,7 @@ Gruppeansvarlig:
  <div class="pic">
   {% if tutor.picture %}
   <a target="_blank" href="{{ tutor.picture }}">
-<img class="tutorpicture" src="{{ tutor.picture }}" /></a>
+<img data-studentnumber="{{ tutor.studentnumber }}" class="tutorpicture" src="{{ tutor.picture }}" /></a>
 {% endif %}
  </div> <!-- /pic -->
  <div class="detailscontainer">
@@ -258,5 +342,6 @@ Gruppeansvarlig:
 </div> <!-- /tutoraddress -->
 
 {% endfor %}
+</div>
 </div>
 {% endblock %}
