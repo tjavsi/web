@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Nyt galleri{% endblock %}
+{% block content %}
+<h1>Opret nyt galleri</h1>
+<form class="twocol" method="post">{% csrf_token %}
+{{ form.non_field_errors }}
+{% for field in form %}
+<div class="label">{{ field.label_tag }}:</div>
+<div class="field">{{ field }}</div>
+{{ field.errors }}
+{% endfor %}
+<div class="field">
+<input type="submit" value="Upload">
+</div>
+</form>
+{% endblock %}

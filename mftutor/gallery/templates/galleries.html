@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Gallerier{% endblock %}
+{% block content %}
+<h1>Gallerier</h1>
+{% if tutor.is_tutorbest %}
+<a href="{% url new_gallery %}">Nyt galleri</a><br />
+{% endif %}
+{% for gallery in gallery_list %}
+<div class="gallery"><a href="{% url picture_gallery id=gallery.pk %}"><h2>{{ gallery.title }}</h2></a></div>
+{% endfor %}
+{% endblock %}

@@ -23,4 +23,6 @@ urlpatterns = patterns('',
     url(r'^email/', include('mftutor.tutormail.urls')),
     url(r'^shirt/', include('mftutor.shirt.urls')),
     url(r'^document/', include('mftutor.documents.urls')),
+    url(r'^gallery/', include('mftutor.gallery.urls')),
+    url(r'^imagefit/', include('imagefit.urls')),
 )
