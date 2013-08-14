@@ -25,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^rus/', include('mftutor.rus.urls')),
     url(r'^reg/', include('mftutor.reg.urls')),
     url(r'^burtavle/$', 'mftutor.reg.views.burtavle', name="burtavle"),
+    url(r'^browser/', include('mftutor.browser.urls')),
 )

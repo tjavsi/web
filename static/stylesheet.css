@@ -683,3 +683,7 @@ td.altTabBg1 {
 a[href^="tel:"] {
 	color: inherit;
 }
+
+.profile_nottutor {
+	color: #666;
+}
