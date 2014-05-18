@@ -20,6 +20,12 @@ You should run the Django project in a virtualenv. For a local non-root virtuale
     cd ../tutorweb/
     pip install -r requirements.txt
 
+Note if you're using OS X Mavericks you will need the following to install the requirement Pillow
+
+    export CFLAGS=-Qunused-arguments
+    export CPPFLAGS=-Qunused-arguments
+
+
 You need to create a mftutor/settings/local.py based on local.py.example in the
 mftutor/settings folder.
 
