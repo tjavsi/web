@@ -15,7 +15,8 @@ from django.core.mail import EmailMessage
 from django.core.mail import get_connection
 from django import forms
 from django.contrib.auth.views import password_change
-from django.views.generic import UpdateView, TemplateView, FormView, ListView
+from django.views.generic import (
+    UpdateView, TemplateView, FormView, ListView, RedirectView)
 
 from mftutor.tutor.models import TutorProfile, TutorGroup, \
     Tutor, BoardMember
@@ -290,3 +291,15 @@ class BoardMemberListView(ListView):
     def get_queryset(self):
         qs = BoardMember.objects.filter(tutor__year=self.request.year)
         return qs.select_related()
+
+
+class ChangeYearView(RedirectView):
+    permanent = False
+    query_string = True
+
+    def dispatch(self, request, *args, **kwargs):
+        year = int(kwargs['year'])
+        self.request.session['year'] = self.request.session['rusyear'] = year
+        return super(ChangeYearView, self).dispatch(request, *args, **kwargs)
+
+    url = '/%(remainder)s'

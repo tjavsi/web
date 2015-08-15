@@ -4,7 +4,7 @@ from .views import (
     logout_view, login_view, profile_view, tutor_password_change_view,
     UploadPictureView, tutors_view, TutorAdminView, switch_user, FrontView,
     BoardAdminView, GroupLeaderView, ResetPasswordView, BoardMemberListView,
-    TutorDumpView)
+    TutorDumpView, ChangeYearView)
 from .auth import tutorbest_required, tutor_required
 
 urlpatterns = patterns('',
@@ -27,4 +27,5 @@ urlpatterns = patterns('',
     url(r'^resetpassword/$', tutorbest_required(ResetPasswordView.as_view()), name='reset_password'),
     url(r'^boardadmin/(?P<year>\d+)/$', tutorbest_required(BoardAdminView.as_view()), name='board_admin'),
     url(r'^su/(?P<new_user>[^/]*)/$', switch_user),
+    url(r'^(?P<year>20[0-9]{2})/(?P<remainder>.*)$', ChangeYearView.as_view(), name='change_year'),
 )
