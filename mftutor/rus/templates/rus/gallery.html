@@ -1,4 +1,5 @@
 {% extends "rus/base.html" %}
+{% load staticfiles %}
 {% block title %}Galleri{% endblock %}
 
 {% block content %}
@@ -8,6 +9,6 @@
 skal du benytte dit brugernavn og kodeord til rushjemmesiden.
 Man skal være logget ind for at se billeder fra galleriet.</p>
 
-<p>Besøg <a href="{{ STATIC_URL }}rusgallery/">galleriet</a>.</p>
+<p>Besøg <a href="{% static "rusgallery/" %}">galleriet</a>.</p>
 
 {% endblock %}
