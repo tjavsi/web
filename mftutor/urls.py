@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'mftutor.views.home', name='home'),
     # url(r'^mftutor/', include('mftutor.foo.urls')),
@@ -29,4 +29,4 @@ urlpatterns = patterns('',
     url(r'^dump/', include('mftutor.dump.urls')),
     url(r'^browser/', include('mftutor.browser.urls')),
     url(r'^tutorhold/', include('mftutor.rusclass.urls')),
-)
+]
