@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block title %}Galleri{% endblock %}
 
 {% block content %}
@@ -8,6 +9,6 @@
 skal du benytte dit brugernavn og kodeord til tutorhjemmesiden.
 Man skal være logget ind og medlem af tutorforeningen for at se billeder fra tutorgalleriet.</p>
 
-<p>Besøg <a href="{{ STATIC_URL }}gallery/">galleriet</a>.</p>
+<p>Besøg <a href="{% static "gallery/" %}">galleriet</a>.</p>
 
 {% endblock %}
