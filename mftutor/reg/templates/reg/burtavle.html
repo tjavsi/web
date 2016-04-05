@@ -1,3 +1,4 @@
+{% load staticfiles %}
 {# vim:set filetype=htmldjango sw=4 sts=4 ts=4 et: #}<!DOCTYPE html>
 <html>
 <head>
@@ -80,7 +81,7 @@ function set_height() {
         </div>
     </div>
     <div style="clear: right; float: right; z-index:-1" id='picture'>
-        <img src="{{STATIC_URL}}bur/{{ note.color }}15.png" />
+        <img src="{% static "bur/" %}{{ note.color }}15.png" />
     </div>
 </div>
 <div style="min-height: 220px">
