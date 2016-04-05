@@ -198,8 +198,6 @@ LOGGING = {
     }
 }
 
-AUTH_PROFILE_MODULE = 'tutor.TutorProfile'
-
 LOGIN_REDIRECT_URL = "/"
 
 LOGIN_URL = '/login/'
